@@ -1,1 +1,46 @@
-2a02:8070:183:cee0:99f8:52c0:7ca9:60d0
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>
+        Testscript
+    </h1>
+    <button onclick="startButton()">
+        Start
+    </button>
+    <p id="exercise">
+        Here comes the question
+    </p>
+    <input type="text" onkeypress="keyWasPressed()" id="inputField" value="a">
+</body>
+<script>
+    function startButton(){
+        document.getElementById("exercise").innerHTML= randomExercise().join("");
+    }
+    /**
+     * This fuction triggers everytime the user types in the inputField so the input can be checked
+     * 
+     * 
+     */
+    function keyWasPressed(){
+        //TODO do clean the inputfield from spaces
+        //This is needed, otherwise the inputField is not read up-to-Date
+        setTimeout(function(){keyWasPressed2();},1); // Why does "setTimeout(keyWasPressed2(),1);" not work?
+    }
+    function keyWasPressed2(){
+        console.log("test")
+        var inputString = document.getElementById("inputField").value;
+        if(inputString === "yes"){
+            document.getElementById("inputField").value = "";
+        }
+    }
+    function randomExercise(){
+        return [Math.floor(Math.random()*10), '*', Math.floor(Math.random()*10)]
+    }
+    function solutionOfExercise(input){
+        //TODO
+        return 0;
+    }
+</script>
+
+</html>
