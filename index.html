@@ -5,41 +5,84 @@
     <h1>
         Testscript
     </h1>
-    <button onclick="startButton()">
-        Start
-    </button>
     <p id="exercise">
-        Here comes the question
+        Start after typing anything in here
     </p>
     <input type="text" onkeypress="keyWasPressed()" id="inputField" value="a">
+    <p id="progress">Progress</p>
+    <p id="average">Average of 10</p>
 </body>
 <script>
-    function startButton(){
-        document.getElementById("exercise").innerHTML= randomExercise().join("");
+    var exercise = [1, '*', 1];
+    var solution = 1;
+    var progress = -1;
+    var time;
+    var time10 = new Array(10);
+
+
+    function startExercise() {
+        randomExercise();
+        document.getElementById("exercise").innerHTML = exercise.join("");
+        time = -Date.now();
     }
     /**
      * This fuction triggers everytime the user types in the inputField so the input can be checked
-     * 
-     * 
      */
-    function keyWasPressed(){
-        //TODO do clean the inputfield from spaces
+    function keyWasPressed() {
+        if (progress > -1) {
         //This is needed, otherwise the inputField is not read up-to-Date
-        setTimeout(function(){keyWasPressed2();},1); // Why does "setTimeout(keyWasPressed2(),1);" not work?
-    }
-    function keyWasPressed2(){
-        console.log("test")
-        var inputString = document.getElementById("inputField").value;
-        if(inputString === "yes"){
-            document.getElementById("inputField").value = "";
+            setTimeout(keyWasPressed2, 1000);
+        } else {
+            setTimeout(function () { document.getElementById("inputField").value = "";
+        progress++;
+        document.getElementById("progress").innerHTML = "Progress: " + progress;
+        startExercise(); }, 1);
         }
     }
-    function randomExercise(){
-        return [Math.floor(Math.random()*10), '*', Math.floor(Math.random()*10)]
+    /**
+    * Will always be triggerd by keyWasPressed(), when the Test started
+    */
+    function keyWasPressed2() {
+        console.log("AAAA");
+        var inputString = document.getElementById("inputField").value;
+        inputString = inputString.replace(/\s+/g, '');
+        document.getElementById("inputField").value = inputString;
+        if (inputString == solution) {
+            inputIsSolution();
+        }
     }
-    function solutionOfExercise(input){
+    /**
+    *Clears the inputField, adds 1 to Progress and starts a new Exercise
+    */
+    function inputIsSolution() {
+        time += Date.now();
+        time10[progress%10] = time;
+        document.getElementById("inputField").value = "";
+        progress++;
+        if(progress>=10){
+            document.getElementById("average").innerHTML="Average of 10: " + averageOfArray(time10);
+        }
+        document.getElementById("progress").innerHTML = "Progress: " + progress;
+        startExercise();
+    }
+
+    function randomExercise() {
+        exercise = [Math.floor(Math.random() * 10), '*', Math.floor(Math.random() * 10)];
+        solutionOfExercise(exercise);
+    }
+    function solutionOfExercise(input) {
         //TODO
-        return 0;
+        solution = input[0] * input[2];
+    }
+    function averageOfArray(input){
+        var result = 0;
+        for(i in input){
+            result += input[i];
+        }
+        console.log(result + ' ' + input.length)
+        result= result/input.length;
+        console.log(result);
+        return result;
     }
 </script>
 
